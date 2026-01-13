@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const fetch = require("node-fetch");
 
-const app = express();
 app.use(cors({
   origin: "https://websitecchs.vercel.app",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
+const app = express();
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
