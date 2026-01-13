@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - WebsiteCCHS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">WebsiteCCHS</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <button onclick="logout()" style="margin-left:10px;">Logout</button>
+    </nav>
+  </header>
+
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3>Admin Menu</h3>
+      <button onclick="showAddGame()">Add Game</button>
+      <button onclick="showGameList()">Game List</button>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <!-- Add Game Form -->
+      <div id="addGameSection" class="admin-form">
+        <h2>Add a Game</h2>
+        <input type="text" id="title" placeholder="Game Title">
+        <textarea id="html" rows="6" placeholder="Paste HTML here"></textarea>
+        <button onclick="addGame()">Add Game</button>
+      </div>
+
+      <!-- Game List -->
+      <div id="gameListSection" class="admin-form" style="display:none;">
+        <h2>All Games</h2>
+        <div id="gameList"></div>
+      </div>
+    </main>
+  </div>
+
+  <footer>© 2026 WebsiteCCHS</footer>
+  <script src="app.js"></script>
+</body>
+</html>
