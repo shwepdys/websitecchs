@@ -5,72 +5,374 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Login - WebsiteCCHS</title>
 <style>
-/* ... keep all your existing CSS ... */
+/* ============================================
+   Global Styles
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+header {
+  background: rgba(255, 255, 255, 0.98);
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+nav {
+  display: flex;
+  gap: 2rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+nav a:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+nav a:hover::after {
+  width: 60%;
+}
+
+/* ============================================
+   Container
+   ============================================ */
+.container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* ============================================
+   Admin Form
+   ============================================ */
+.admin-form {
+  background: white;
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 420px;
+  width: 100%;
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-form h2 {
+  margin-bottom: 2rem;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.form-group input::placeholder {
+  color: #aaa;
+}
+
+#errorMessage {
+  color: #dc3545;
+  display: none;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #ffe6e6;
+  border-left: 4px solid #dc3545;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+footer {
+  background: rgba(255, 255, 255, 0.98);
+  text-align: center;
+  padding: 1.5rem;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  nav {
+    gap: 1rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  .admin-form {
+    padding: 2rem 1.5rem;
+  }
+
+  .admin-form h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .admin-form {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .admin-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group input {
+    padding: 0.75rem;
+  }
+
+  button {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   Accessibility
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">WebsiteCCHS</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="login.html">Admin Login</a>
-    <a href="admin.html">Admin Panel</a>
-  </nav>
+<div class="logo">WebsiteCCHS</div>
+<nav>
+<a href="index.html">Home</a>
+<a href="login.html">Admin Login</a>
+<a href="admin.html">Admin Panel</a>
+</nav>
 </header>
 
 <div class="container">
-  <div class="admin-form">
-    <h2>Admin Login</h2>
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" id="username" placeholder="Enter your username">
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Enter your password">
-    </div>
-    <div class="form-group" id="errorMessage" style="color: #dc3545; display: none; margin-bottom: 1rem;"></div>
-    <button onclick="loginAdmin()">Login</button>
-  </div>
+<div class="admin-form">
+<h2>Admin Login</h2>
+<div class="form-group">
+<label for="username">Username</label>
+<input type="text" id="username" placeholder="Enter your username">
+</div>
+<div class="form-group">
+<label for="password">Password</label>
+<input type="password" id="password" placeholder="Enter your password">
+</div>
+<div class="form-group">
+<div id="errorMessage"></div>
+</div>
+<button onclick="loginAdmin()">Login</button>
+</div>
 </div>
 
 <footer>© 2026 WebsiteCCHS</footer>
 
 <script>
-const API = "https://websitecchs.onrender.com/api"; // backend API URL
+const API = "https://websitecchs.onrender.com/api";
 
 async function loginAdmin() {
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value.trim();
   const errorMessage = document.getElementById('errorMessage');
-
+  
   errorMessage.style.display = 'none';
-
+  
   if (!username || !password) {
     errorMessage.textContent = 'Please enter both username and password';
     errorMessage.style.display = 'block';
     return;
   }
-
+  
   try {
     const res = await fetch(`${API}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
     });
-
+    
     const data = await res.json();
-
+    
     if (!res.ok) {
       throw new Error(data.message || 'Login failed');
     }
-
-    // Save token in localStorage
+    
     localStorage.setItem('token', data.token);
-
-    // Redirect to admin panel
     window.location.href = 'admin.html';
-
   } catch (err) {
     console.error(err);
     errorMessage.textContent = err.message;
@@ -78,7 +380,6 @@ async function loginAdmin() {
   }
 }
 
-// Allow Enter key to submit form
 document.addEventListener('DOMContentLoaded', () => {
   const inputs = document.querySelectorAll('input');
   inputs.forEach(input => {
