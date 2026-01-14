@@ -471,6 +471,13 @@ footer {
 <script>
 const API = "https://websitecchs.onrender.com/api";
 const token = localStorage.getItem("token");
+if (!token) {
+  window.location.href = "index.html"; // redirect to login/register page
+}
+
+// Optional: decode JWT to get role
+const payload = JSON.parse(atob(token.split('.')[1]));
+const userRole = payload.role || "user"; // defaults to user
 let games = [];
 
 async function fetchGames() {
@@ -478,7 +485,12 @@ async function fetchGames() {
   container.innerHTML = '<div class="loading">Loading games...</div>';
   
   try {
-    const res = await fetch(`${API}/games`);
+    const res = await fetch(`${API}/games`, {
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer " + token
+  }
+});
     if (!res.ok) throw new Error('Failed to fetch games');
     
     games = await res.json();
@@ -586,15 +598,21 @@ fetchGames();
   const adminLink = document.getElementById("adminLink");
   const logoutLink = document.getElementById("logoutLink");
 
-  if (tokenCheck) {
-    loginLink.style.display = "none";
+  if (token) {
+  loginLink.style.display = "none";
+  logoutLink.style.display = "inline-block";
+
+  if (userRole === "admin") {
     adminLink.style.display = "inline-block";
-    logoutLink.style.display = "inline-block";
   } else {
-    loginLink.style.display = "inline-block";
     adminLink.style.display = "none";
-    logoutLink.style.display = "none";
   }
+
+} else {
+  loginLink.style.display = "inline-block";
+  adminLink.style.display = "none";
+  logoutLink.style.display = "none";
+}
 
   logoutLink.addEventListener("click", (e) => {
     e.preventDefault();

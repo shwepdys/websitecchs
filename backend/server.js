@@ -7,10 +7,11 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://websitecchs.vercel.app",
+  origin: "https://websitecchs.vercel.app", // <-- your frontend URL
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 
 app.use(express.json());
 
