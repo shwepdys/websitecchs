@@ -4,7 +4,6 @@ const auth = require("../middleware/auth");
 
 const router = express.Router();
 
-<script>
 const token = localStorage.getItem("token");
 
 if (!token) {
@@ -14,7 +13,6 @@ if (!token) {
 // Optional: decode JWT to show username or role
 const payload = JSON.parse(atob(token.split('.')[1]));
 console.log("Logged in as:", payload.username, "Role:", payload.role);
-</script>
 
 // public
 router.get("/", async (req, res) => {
