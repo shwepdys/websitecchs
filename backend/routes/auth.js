@@ -44,10 +44,12 @@ router.post("/login", async (req, res) => {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const match = await bcrypt.compare(password, account.password);
+  const match = await user.matchPassword(password);
   if (!match) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
+  console.log("Password from request:", password);
+  console.log("Password in DB:", user.password);
 
   const token = jwt.sign(
     { id: account._id, username: account.username, role },
