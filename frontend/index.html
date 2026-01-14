@@ -3,168 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Register - WebsiteCCHS</title>
+<title>WebsiteCCHS - Register/Login</title>
 <style>
-/* Basic styles for a clean form */
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-}
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
 
-.admin-form {
-  background: white;
-  padding: 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  width: 350px;
-}
+  .form-container {
+    background: white;
+    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    max-width: 400px;
+    width: 100%;
+  }
 
-.admin-form h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-.admin-form input {
-  width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
+  input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    margin-bottom: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+  }
 
-.admin-form button {
-  width: 100%;
-  padding: 0.8rem;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
+  button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+  }
 
-.admin-form button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+  .error-message {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    display: none;
+  }
 
-.success-message, .error-message {
-  display: none;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border-radius: 6px;
-  font-weight: 600;
-}
-
-.success-message {
-  background: #d4edda;
-  color: #155724;
-  border-left: 4px solid #28a745;
-}
-
-.error-message {
-  background: #ffe6e6;
-  color: #dc3545;
-  border-left: 4px solid #dc3545;
-}
-
-p a {
-  color: #667eea;
-  text-decoration: none;
-}
-
-p a:hover {
-  text-decoration: underline;
-}
+  .toggle-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #667eea;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
-<div class="admin-form">
-<h2>Register User</h2>
 
-<div class="success-message" id="successMessage"></div>
-<div class="error-message" id="errorMessage"></div>
+<div class="form-container">
+  <h2 id="formTitle">Register</h2>
+  <div class="error-message" id="errorMessage"></div>
 
-<input type="text" id="username" placeholder="Username">
-<input type="password" id="password" placeholder="Password">
-<button onclick="registerUser()">Register</button>
-
-<p style="text-align:center; margin-top:1rem;">
-  Already have an account? <a href="login.html">Login</a>
-</p>
+  <input type="text" id="username" placeholder="Enter your email">
+  <input type="password" id="password" placeholder="Enter your password">
+  <button id="submitBtn">Register</button>
+  <span class="toggle-link" id="toggleForm">Already have an account? Login</span>
 </div>
 
 <script>
-  // If user already has a token, redirect to the game page (or dashboard)
-  const token = localStorage.getItem("token");
-  if (token) {
-    window.location.href = "games.html"; // or user dashboard
-  }
+const API = "https://websitecchs.onrender.com/api/auth";
+let isLogin = false;
 
-const API = "https://websitecchs.onrender.com/api";
+const formTitle = document.getElementById("formTitle");
+const submitBtn = document.getElementById("submitBtn");
+const toggleForm = document.getElementById("toggleForm");
+const errorMessage = document.getElementById("errorMessage");
 
-function isValidEmail(email) {
-  // Simple email regex
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+toggleForm.addEventListener("click", () => {
+  isLogin = !isLogin;
+  formTitle.textContent = isLogin ? "Login" : "Register";
+  submitBtn.textContent = isLogin ? "Login" : "Register";
+  toggleForm.textContent = isLogin ? "Don't have an account? Register" : "Already have an account? Login";
+  errorMessage.style.display = "none";
+});
 
-async function registerUser() {
+submitBtn.addEventListener("click", async () => {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
-  const successMessage = document.getElementById("successMessage");
-  const errorMessage = document.getElementById("errorMessage");
-
-  successMessage.style.display = "none";
-  errorMessage.style.display = "none";
 
   if (!username || !password) {
-    errorMessage.textContent = "Please enter both email and password";
-    errorMessage.style.display = "block";
-    return;
-  }
-
-  if (!isValidEmail(username)) {
-    errorMessage.textContent = "Please enter a valid email address";
+    errorMessage.textContent = "Email and password required";
     errorMessage.style.display = "block";
     return;
   }
 
   try {
-    const res = await fetch(`${API}/auth/register`, {
+    const res = await fetch(`${API}/${isLogin ? "login" : "register"}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }) // role is forced to 'user' in backend
+      body: JSON.stringify({ username, password })
     });
 
     const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Error");
 
-    if (!res.ok) throw new Error(data.message || "Registration failed");
+    if (!isLogin) {
+      alert("Registration successful! Please login.");
+      isLogin = true;
+      formTitle.textContent = "Login";
+      submitBtn.textContent = "Login";
+      toggleForm.textContent = "Don't have an account? Register";
+      errorMessage.style.display = "none";
+      return;
+    }
 
-    successMessage.textContent = data.message;
-    successMessage.style.display = "block";
-
-    // Clear inputs
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
+    // Login successful → save token
+    localStorage.setItem("token", data.token);
+    window.location.href = "games.html"; // redirect to main game page
 
   } catch (err) {
     errorMessage.textContent = err.message;
     errorMessage.style.display = "block";
   }
-}
+});
+
+// Force login check if user tries to manually open games page
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("token")) {
+    window.location.href = "games.html";
+  }
+});
 </script>
 </body>
 </html>
