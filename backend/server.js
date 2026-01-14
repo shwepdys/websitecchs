@@ -5,12 +5,15 @@ const cors = require("cors");
 
 const app = express();
 
-// CORS configuration
+// CORS configuration - must be before other middleware
+// This handles preflight OPTIONS requests automatically
 app.use(cors({
   origin: "https://websitecchs.vercel.app",
-  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   optionsSuccessStatus: 200
 }));
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
