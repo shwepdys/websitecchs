@@ -16,9 +16,6 @@ const corsOptions = {
 // Apply CORS to all routes
 app.use(cors(corsOptions));
 
-// Explicitly handle OPTIONS preflight requests as a fallback
-app.options("*", cors(corsOptions));
-
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
