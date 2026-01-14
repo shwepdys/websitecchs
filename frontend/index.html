@@ -8,25 +8,35 @@
  body {
     font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    
-    /* Centering fix */
     display: grid;
-    place-items: center; /* centers both vertically and horizontally */
+    place-items: center;
     min-height: 100vh;
     margin: 0;
+    transition: background 0.3s, color 0.3s;
 }
 
+body.dark {
+    background: #121212;
+    color: #f0f0f0;
+}
 
-  .form-container {
+.form-container {
     background: white;
     padding: 2.5rem 2rem;
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     max-width: 400px;
     width: 100%;
-  }
+    position: relative;
+    transition: background 0.3s, color 0.3s;
+}
 
-  h2 {
+body.dark .form-container {
+    background: #2c2c2c;
+    color: #f0f0f0;
+}
+
+h2 {
     text-align: center;
     margin-bottom: 1.5rem;
     font-size: 2rem;
@@ -34,20 +44,63 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-  }
+}
 
-  input {
+input {
     width: 90%;
     padding: 0.875rem 1rem;
     margin-bottom: 1rem;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
     font-size: 1rem;
-    display: block; /* ensures full width */
+    display: block;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
 }
 
+body.dark input {
+    background: #3a3a3a;
+    color: #f0f0f0;
+    border-color: #555;
+}
 
-  button {
+.error-message {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    display: none;
+}
+
+.toggle-link {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #667eea;
+    cursor: pointer;
+}
+
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #667eea;
+}
+
+.remember-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+button {
     width: 99%;
     padding: 1rem;
     border: none;
@@ -56,31 +109,36 @@
     color: white;
     font-weight: 700;
     cursor: pointer;
-  }
+}
 
-  .error-message {
-    color: #dc3545;
-    margin-bottom: 1rem;
-    display: none;
-  }
-
-  .toggle-link {
-    display: block;
-    text-align: center;
-    margin-top: 1rem;
-    color: #667eea;
+.dark-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
     cursor: pointer;
-  }
+    font-weight: 600;
+    color: #667eea;
+}
 </style>
 </head>
 <body>
+<div class="dark-toggle" id="darkToggle">🌙</div>
 
 <div class="form-container">
   <h2 id="formTitle">Register</h2>
   <div class="error-message" id="errorMessage"></div>
 
   <input type="text" id="username" placeholder="Enter your email">
-  <input type="password" id="password" placeholder="Enter your password">
+  <div class="password-wrapper">
+    <input type="password" id="password" placeholder="Enter your password">
+    <span class="toggle-password" id="togglePassword">Show</span>
+  </div>
+
+  <div class="remember-wrapper">
+    <input type="checkbox" id="rememberMe">
+    <label for="rememberMe">Remember Me</label>
+  </div>
+
   <button id="submitBtn">Register</button>
   <span class="toggle-link" id="toggleForm">Already have an account? Login</span>
 </div>
@@ -93,7 +151,22 @@ const formTitle = document.getElementById("formTitle");
 const submitBtn = document.getElementById("submitBtn");
 const toggleForm = document.getElementById("toggleForm");
 const errorMessage = document.getElementById("errorMessage");
+const passwordInput = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
+const rememberMe = document.getElementById("rememberMe");
+const darkToggle = document.getElementById("darkToggle");
 
+// Dark mode toggle
+darkToggle.addEventListener('click', () => document.body.classList.toggle('dark'));
+
+// Show/hide password
+togglePassword.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    togglePassword.textContent = type === 'password' ? 'Show' : 'Hide';
+});
+
+// Toggle register/login form
 toggleForm.addEventListener("click", () => {
   isLogin = !isLogin;
   formTitle.textContent = isLogin ? "Login" : "Register";
@@ -102,15 +175,20 @@ toggleForm.addEventListener("click", () => {
   errorMessage.style.display = "none";
 });
 
+// Submit form
 submitBtn.addEventListener("click", async () => {
   const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const password = passwordInput.value.trim();
+  errorMessage.style.display = "none";
 
   if (!username || !password) {
     errorMessage.textContent = "Email and password required";
     errorMessage.style.display = "block";
     return;
   }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = isLogin ? "Logging in..." : "Registering...";
 
   try {
     const res = await fetch(`${API}/${isLogin ? "login" : "register"}`, {
@@ -124,29 +202,34 @@ submitBtn.addEventListener("click", async () => {
 
     if (!isLogin) {
       alert("Registration successful! Please login.");
-      isLogin = true;
-      formTitle.textContent = "Login";
+      toggleForm.click();
+      submitBtn.disabled = false;
       submitBtn.textContent = "Login";
-      toggleForm.textContent = "Don't have an account? Register";
-      errorMessage.style.display = "none";
       return;
     }
 
-    // Login successful → save token
-    localStorage.setItem("token", data.token);
-    window.location.href = "games.html"; // redirect to main game page
+    // Save token
+    if (rememberMe.checked) localStorage.setItem("token", data.token);
+    else sessionStorage.setItem("token", data.token);
 
+    window.location.href = "games.html";
   } catch (err) {
     errorMessage.textContent = err.message;
     errorMessage.style.display = "block";
+    submitBtn.disabled = false;
+    submitBtn.textContent = isLogin ? "Login" : "Register";
   }
 });
 
-// Force login check if user tries to manually open games page
-document.addEventListener("DOMContentLoaded", () => {
-  if (localStorage.getItem("token")) {
-    window.location.href = "games.html";
-  }
+// Enter key support
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('keypress', e => { if(e.key==='Enter') submitBtn.click(); });
+  });
+
+  // Auto redirect if already logged in
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  if(token) window.location.href = "games.html";
 });
 </script>
 </body>
