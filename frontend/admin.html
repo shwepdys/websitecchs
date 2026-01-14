@@ -5,44 +5,720 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel - WebsiteCCHS</title>
 <style>
-/* ... keep all your existing CSS ... */
+/* ============================================
+   Global Styles
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+header {
+  background: rgba(255, 255, 255, 0.98);
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+nav a:hover {
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+nav a:hover::after {
+  width: 60%;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   Admin Container
+   ============================================ */
+.admin-container {
+  display: flex;
+  min-height: calc(100vh - 120px);
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============================================
+   Sidebar Navigation
+   ============================================ */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  color: white;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 16px rgba(30, 136, 229, 0.2),
+              0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.sidebar h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  position: relative;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.sidebar button {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #1e88e5;
+  border: none;
+  padding: 0.875rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.sidebar button:hover::before {
+  left: 100%;
+}
+
+.sidebar button:hover {
+  background-color: rgba(255, 255, 255, 1);
+  color: #1565c0;
+  transform: translateX(6px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+              0 2px 6px rgba(30, 136, 229, 0.2);
+}
+
+.sidebar button:active {
+  transform: translateX(4px) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+.sidebar button.active {
+  background: white;
+  color: #1565c0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar button:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Main Content Area
+   ============================================ */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   Admin Form
+   ============================================ */
+.admin-form {
+  background-color: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
+              0 8px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.admin-form:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04),
+              0 12px 24px rgba(0, 0, 0, 0.06);
+}
+
+.admin-form h2 {
+  margin-bottom: 2rem;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.admin-form input[type="text"],
+.admin-form textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.admin-form input[type="text"]:focus,
+.admin-form textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.admin-form textarea {
+  resize: vertical;
+  min-height: 200px;
+  font-family: 'Courier New', monospace;
+}
+
+.admin-form button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-form button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.admin-form button:hover::before {
+  left: 100%;
+}
+
+.admin-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.admin-form button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.admin-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================
+   Messages
+   ============================================ */
+.success-message,
+.error-message {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  display: none;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.error-message {
+  background: #ffe6e6;
+  color: #dc3545;
+  border-left: 4px solid #dc3545;
+}
+
+/* ============================================
+   Game List
+   ============================================ */
+#gameList {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.game-item {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+  animation: slideUp 0.4s ease-out both;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.game-item:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.game-item h3 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.game-item-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.game-item-actions button {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.edit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.delete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.game-item-actions button:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+footer {
+  background: rgba(255, 255, 255, 0.98);
+  text-align: center;
+  padding: 1.5rem;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-top: auto;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 992px) {
+  .admin-container {
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .sidebar {
+    width: 220px;
+    padding: 1.5rem 1.25rem;
+  }
+  
+  .main-content {
+    padding: 0;
+  }
+
+  .admin-form {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  nav {
+    gap: 1rem;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .admin-container {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
+  }
+  
+  .sidebar::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+  }
+  
+  .sidebar h3 {
+    display: none;
+  }
+  
+  .sidebar button {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+  }
+  
+  .sidebar button:hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+  
+  .admin-form {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .admin-form h2 {
+    font-size: 1.75rem;
+  }
+
+  .game-item-actions {
+    flex-direction: column;
+  }
+
+  .game-item-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .admin-container {
+    padding: 0.75rem;
+  }
+  
+  .sidebar {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .sidebar button {
+    min-width: 100px;
+    font-size: 0.9rem;
+    padding: 0.625rem 0.875rem;
+  }
+  
+  .admin-form {
+    padding: 1.25rem;
+  }
+
+  .admin-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .admin-form input[type="text"],
+  .admin-form textarea {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .admin-form button {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+
+  .logout-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ============================================
+   Accessibility Improvements
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .sidebar {
+    border: 2px solid white;
+  }
+  
+  .sidebar button {
+    border: 2px solid #1e88e5;
+  }
+  
+  .admin-form {
+    border: 2px solid #e2e8f0;
+  }
+}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">WebsiteCCHS</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </nav>
+<div class="logo">WebsiteCCHS</div>
+<nav>
+<a href="index.html">Home</a>
+<button class="logout-btn" onclick="logout()">Logout</button>
+</nav>
 </header>
 
 <div class="admin-container">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <h3>Admin Menu</h3>
-    <button class="active" onclick="showAddGame()">Add Test</button>
-    <button onclick="showGameList()">Test List</button>
-  </aside>
+<!-- Sidebar -->
+<aside class="sidebar">
+<h3>Admin Menu</h3>
+<button class="active" onclick="showAddGame()">Add Test</button>
+<button onclick="showGameList()">Test List</button>
+</aside>
 
-  <!-- Main content -->
-  <main class="main-content">
-    <!-- Add Game Form -->
-    <div id="addGameSection" class="admin-form">
-      <h2>Add a Test</h2>
-      <div class="success-message" id="successMessage"></div>
-      <div class="error-message" id="errorMessage"></div>
-      <input type="text" id="title" placeholder="Game Title">
-      <textarea id="html" rows="8" placeholder="Paste HTML code here..."></textarea>
-      <button onclick="addGame()">Add Test</button>
-    </div>
+<!-- Main content -->
+<main class="main-content">
+<!-- Add Game Form -->
+<div id="addGameSection" class="admin-form">
+<h2>Add a Test</h2>
+<div class="success-message" id="successMessage"></div>
+<div class="error-message" id="errorMessage"></div>
+<input type="text" id="title" placeholder="Test Title">
+<textarea id="html" rows="8" placeholder="Paste HTML code here..."></textarea>
+<button onclick="addGame()">Add Test</button>
+</div>
 
-    <!-- Game List -->
-    <div id="gameListSection" class="admin-form" style="display:none;">
-      <h2>All Tests</h2>
-      <div id="gameList"></div>
-    </div>
-  </main>
+<!-- Game List -->
+<div id="gameListSection" class="admin-form" style="display:none;">
+<h2>All Tests</h2>
+<div id="gameList"></div>
+</div>
+</main>
 </div>
 
 <footer>© 2026 WebsiteCCHS</footer>
@@ -72,4 +748,3 @@
 
 </body>
 </html>
-
