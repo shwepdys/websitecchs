@@ -81,7 +81,7 @@
 </div>
 
 <script>
-const API = "https://websitecchs.onrender.com/api/auth";
+const API = "https://websitecchs.onrender.com/api";
 let isLogin = false;
 
 const formTitle = document.getElementById("formTitle");
@@ -140,7 +140,7 @@ submitBtn.addEventListener("click", async () => {
 // Force login check if user tries to manually open games page
 document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("token")) {
-    window.location.href = "games.html";
+    window.location.href = "home.html";
   }
 });
 </script>
