@@ -35,6 +35,7 @@ async function loginAdmin() {
   try {
     const res = await fetch(`${API}/auth/login`, {
       method: "POST",
+      mode: 'no-cors',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
     });
@@ -84,6 +85,7 @@ async function addGame() {
   try {
     const res = await fetch(`${API}/games`, {
       method: "POST",
+      mode: 'no-cors',
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
@@ -111,7 +113,8 @@ async function loadGameList() {
 
   try {
     const res = await fetch(`${API}/games`, {
-      headers: { "Authorization": `Bearer ${token}` }
+      mode: 'no-cors',
+      headers: { "Authorization": `Bearer ${token}`, }
     });
 
     if (!res.ok) throw new Error("Failed to load games");
@@ -150,6 +153,7 @@ async function deleteGame(id) {
   try {
     const res = await fetch(`${API}/games/${id}`, {
       method: "DELETE",
+      mode: 'no-cors',
       headers: { "Authorization": `Bearer ${token}` }
     });
     if (!res.ok) throw new Error("Failed to delete game");
@@ -167,6 +171,7 @@ async function editGame(id) {
   try {
     // Fetch current data
     const res = await fetch(`${API}/games/${id}`, {
+      mode: 'no-cors',
       headers: { "Authorization": `Bearer ${token}` }
     });
     const game = await res.json();
@@ -177,6 +182,7 @@ async function editGame(id) {
 
     const updateRes = await fetch(`${API}/games/${id}`, {
       method: "PUT",
+      mode: 'no-cors',
       headers: { 
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
