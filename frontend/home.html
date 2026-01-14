@@ -462,7 +462,7 @@ footer {
 </div>
 
 <div class="game-container" id="games">
-<div class="loading">Loading games...</div>
+<div class="loading">Loading Tests...</div>
 </div>
 </div>
 
@@ -471,10 +471,6 @@ footer {
 <script>
 const API = "https://websitecchs.onrender.com/api";
 const token = localStorage.getItem("token");
-if (!token) {
-  window.location.href = "register.html"; // force registration
-}
-
 let games = [];
 
 async function fetchGames() {
