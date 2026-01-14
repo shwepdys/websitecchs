@@ -1,18 +1,25 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const Admin = require("../models/Admin");
 
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
-  const admin = await Admin.findOne({ username: req.body.username });
-  if (!admin) return res.status(401).json({ error: "User not found" });
+// TEMP admin credentials (you can later connect this to MongoDB)
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "password123";
 
-  const ok = await bcrypt.compare(req.body.password, admin.password);
-  if (!ok) return res.status(403).json({ error: "Wrong password" });
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
 
-  const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
+  if (username !== ADMIN_USER || password !== ADMIN_PASS) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const token = jwt.sign(
+    { username },
+    process.env.JWT_SECRET || "secret123",
+    { expiresIn: "2h" }
+  );
+
   res.json({ token });
 });
 
