@@ -5,43 +5,29 @@ const cors = require("cors");
 
 const app = express();
 
-// CORS configuration - must be before other middleware
-const corsOptions = {
-  origin: "https://websitecchs.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  optionsSuccessStatus: 200
-};
-
-// Apply CORS to all routes
-app.use(cors(corsOptions));
-
+// Middleware
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"));
+app.use(cors({
+  origin: "https://websitecchs.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
-// Test route to verify CORS is working
-app.get("/api/test-cors", (req, res) => {
-  res.json({ message: "CORS is working!", origin: req.headers.origin });
-});
-
+// Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/games", require("./routes/games"));
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Server running");
+// Test route
+app.get("/", (req, res) => {
+  res.send("Backend is running");
 });
 
-app.get("/proxy", async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.send("No URL");
+// MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error(err));
 
-  try {
-    const r = await fetch(url);
-    const text = await r.text();
-    res.send(text);
-  } catch {
-    res.status(500).send("Proxy error");
-  }
-});
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Server running on", PORT));
