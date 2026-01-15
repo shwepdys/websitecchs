@@ -726,40 +726,52 @@ footer {
 <script src="app.js"></script>
 
 <script>
-function getToken() {
-  return localStorage.getItem("token") || sessionStorage.getItem("token");
-}
+const getToken = () => localStorage.getItem("token") || sessionStorage.getItem("token");
 
-function getUser() {
+document.addEventListener("DOMContentLoaded", () => {
   const token = getToken();
-  if (!token) return null;
+
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  let payload;
   try {
-    return JSON.parse(atob(token.split('.')[1]));
-  } catch {
-    return null;
+    payload = JSON.parse(atob(token.split('.')[1]));
+  } catch (err) {
+    console.error("Invalid token:", err);
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    window.location.href = "index.html";
+    return;
   }
-}
 
-function requireAuth() {
-  const user = getUser();
-  if (!user) {
-    window.location.replace("index.html");
-    return null;
+  console.log("JWT payload:", payload); // <-- IMPORTANT DEBUG LINE
+
+  if (payload.role !== "admin") {
+    alert("Access denied. Admins only.");
+    window.location.href = "games.html";
+    return;
   }
-  return user;
-}
-const user = requireAuth();
 
-if (user.role !== "admin") {
-  alert("Admins only.");
-  window.location.replace("index.html");
-}
+  // If admin, allow page
+  const loginLink = document.getElementById("loginLink");
+  const adminLink = document.getElementById("adminLink");
+  const logoutLink = document.getElementById("logoutLink");
 
-document.getElementById("logoutLink")?.addEventListener("click", e => {
-  e.preventDefault();
-  localStorage.removeItem("token");
-  sessionStorage.removeItem("token");
-  window.location.replace("index.html");
+  if (loginLink) loginLink.style.display = "none";
+  if (adminLink) adminLink.style.display = "inline-block";
+  if (logoutLink) logoutLink.style.display = "inline-block";
+
+  if (logoutLink) {
+    logoutLink.addEventListener("click", e => {
+      e.preventDefault();
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+      window.location.href = "index.html";
+    });
+  }
 });
 </script>
 </body>
