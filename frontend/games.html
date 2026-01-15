@@ -470,7 +470,7 @@ footer {
 
 <script>
 const API = "https://websitecchs.onrender.com/api";
-let token = localStorage.getItem("token");
+let token = localStorage.getItem("token") || sessionStorage.getItem("token");
 let userRole = "user";
 
 try {
@@ -478,11 +478,13 @@ try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     userRole = payload.role || "user";
   } else {
-    window.location.href = "index.html"; // redirect if no token
+    // Not logged in → go to login page
+    window.location.href = "index.html";
   }
 } catch(e) {
   console.warn("Invalid token, redirecting");
   localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
   window.location.href = "index.html";
 }
 
