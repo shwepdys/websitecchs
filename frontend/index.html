@@ -301,35 +301,32 @@ submitBtn.addEventListener("click", async () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Check if token exists
   const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-  // Update nav links immediately
+  
+  // Update nav links
   const loginLink = document.getElementById('loginLink');
   const adminLink = document.getElementById('adminLink');
   const logoutLink = document.getElementById('logoutLink');
 
-  if(token){
+  if (token) {
     loginLink.style.display = 'none';
     logoutLink.style.display = 'inline-block';
 
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      if(payload.role === 'admin') adminLink.style.display = 'inline-block';
-      else adminLink.style.display = 'none';
+      adminLink.style.display = payload.role === 'admin' ? 'inline-block' : 'none';
     } catch(e){
       console.warn("Invalid token");
       adminLink.style.display = 'none';
     }
 
-    // Redirect only if on login/register form, not immediately after logout
-    if(!sessionStorage.getItem('justLoggedOut')){
+    // Only redirect if user is trying to access login/register page directly
+    if (window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/")) {
       window.location.href = "games.html";
-    } else {
-      sessionStorage.removeItem('justLoggedOut'); // clear flag
     }
+
   } else {
-    // No token → default nav
+    // Not logged in
     loginLink.style.display = 'inline-block';
     adminLink.style.display = 'none';
     logoutLink.style.display = 'none';
