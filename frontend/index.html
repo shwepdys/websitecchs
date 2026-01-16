@@ -157,9 +157,16 @@ const togglePassword = document.getElementById("togglePassword");
 const darkToggle = document.getElementById("darkToggle");
 
 // Dark mode toggle
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+  darkToggle.textContent = "☀️";
+}
+
 darkToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark');
-  darkToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  const isDark = document.body.classList.contains('dark');
+  darkToggle.textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem("theme", isDark ? "dark" : "light");
 });
 
 // Show/hide password

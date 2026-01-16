@@ -420,6 +420,21 @@ footer {
   }
 }
 
+.dark-toggle {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease;
+    z-index: 9999;
+}
+
+.dark-toggle:hover {
+    transform: scale(1.2);
+}
+
 /* ============================================
    Accessibility
    ============================================ */
@@ -441,6 +456,7 @@ footer {
 </head>
 <body>
 <header>
+<div class="dark-toggle" id="darkToggle">🌙</div>
 <div class="logo">WebsiteCCHS</div>
 <nav>
   <a href="games.html">Home</a>
@@ -578,6 +594,22 @@ logoutLink.addEventListener("click", (e) => {
   window.location.href = "index.html"; // redirect to login page
 });
 
+const darkToggle = document.getElementById("darkToggle");
+
+// Load saved theme
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+  darkToggle.textContent = "☀️";
+}
+
+// Toggle theme
+darkToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  
+  const isDark = document.body.classList.contains("dark");
+  darkToggle.textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
 </script>
 </body>
 </html>
