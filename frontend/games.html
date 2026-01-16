@@ -124,11 +124,6 @@ nav a:hover::after {
   font-weight: 800;
 }
 
-body.dark .page-header {
-  background: #2c2c2c;
-  color: #f0f0f0;
-}
-
 .page-header p {
   font-size: 1.25rem;
   color: rgba(255, 255, 255, 0.95);
@@ -187,10 +182,6 @@ body.dark .page-header {
   animation: fadeIn 0.6s ease-out 0.4s both;
 }
 
-body.dark .game-container {
-  background: #2c2c2c;
-  color: #f0f0f0;
-}
 
 /* ============================================
    Game Cards
@@ -203,11 +194,6 @@ body.dark .game-container {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   animation: slideUp 0.5s ease-out both;
-}
-
-body.dark .game-card {
-  background: #2c2c2c;
-  color: #f0f0f0;
 }
 
 @keyframes slideUp {
@@ -296,10 +282,6 @@ body.dark .game-card {
   font-weight: 600;
   display: inline-block;
 }
-body.dark .game-category {
-  background: #2c2c2c;
-  color: #f0f0f0;
-}
 
 /* ============================================
    Loading & Empty States
@@ -357,11 +339,6 @@ footer {
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   margin-top: 3rem;
-}
-
-body.dark footer {
-  background: #2c2c2c;
-  color: #f0f0f0;
 }
 
 
@@ -444,22 +421,38 @@ body.dark footer {
     font-size: 1.2rem;
   }
 }
+/* ========== DARK MODE IMPROVEMENTS ========== */
 
-body.dark {
-    background: #121212;
-    color: #f0f0f0;
+body.dark header {
+  background: #1e1e1e;
 }
 
-body.dark .form-container {
-    background: #2c2c2c;
-    color: #f0f0f0;
+body.dark nav a {
+  color: #f0f0f0;
 }
 
-body.dark input {
-    background: #3a3a3a;
-    color: #f0f0f0;
-    border-color: #555;
+body.dark nav a:hover {
+  background: rgba(255,255,255,0.08);
 }
+
+body.dark .search-bar input {
+  background: #2a2a2a;
+  color: white;
+}
+
+body.dark .empty-state {
+  background: #1f1f1f;
+}
+
+body.dark footer {
+  background: #1e1e1e;
+}
+
+body.dark .game-description,
+body.dark .game-title {
+  color: #f0f0f0;
+}
+
 
 .dark-toggle {
     position: fixed;
