@@ -21,8 +21,6 @@ const userSchema = new mongoose.Schema({
     enum: ["user", "admin"],
     default: "user"
   },
-  timeTab: { type: Number, default: 0 },
-  timeActive: { type: Number, default: 0 },
 }, { timestamps: true }); // automatically adds createdAt & updatedAt
 
 // Pre-save hook to hash password
