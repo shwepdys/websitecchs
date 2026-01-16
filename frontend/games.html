@@ -422,17 +422,19 @@ footer {
 
 .dark-toggle {
     position: fixed;
-    top: 15px;
+    top: 80px; /* ← lower than before */
     right: 20px;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.2s ease;
-    z-index: 9999;
+    z-index: 99999;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0.85;
 }
 
 .dark-toggle:hover {
     transform: scale(1.2);
+    opacity: 1;
 }
 
 /* ============================================
@@ -456,7 +458,8 @@ footer {
 </head>
 <body>
 <header>
-<div class="dark-toggle" id="darkToggle">🌙</div>
+<div id="darkToggle" class="dark-toggle">🌙</div>
+
 <div class="logo">WebsiteCCHS</div>
 <nav>
   <a href="games.html">Home</a>
@@ -594,21 +597,29 @@ logoutLink.addEventListener("click", (e) => {
   window.location.href = "index.html"; // redirect to login page
 });
 
-const darkToggle = document.getElementById("darkToggle");
+document.addEventListener("DOMContentLoaded", () => {
+  const darkToggle = document.getElementById("darkToggle");
 
-// Load saved theme
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
-  darkToggle.textContent = "☀️";
-}
+  if (!darkToggle) {
+    console.error("Dark toggle not found");
+    return;
+  }
 
-// Toggle theme
-darkToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  
-  const isDark = document.body.classList.contains("dark");
-  darkToggle.textContent = isDark ? "☀️" : "🌙";
-  localStorage.setItem("theme", isDark ? "dark" : "light");
+  // Load saved theme
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    darkToggle.textContent = "☀️";
+  }
+
+  // Toggle theme
+  darkToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    const isDark = document.body.classList.contains("dark");
+    darkToggle.textContent = isDark ? "☀️" : "🌙";
+
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
 });
 </script>
 </body>
