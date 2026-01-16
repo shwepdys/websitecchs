@@ -126,6 +126,72 @@ button {
 }
 </style>
 </head>
+<script>
+let tabStart = Date.now();
+let activeStart = Date.now();
+
+let totalTabTime = 0;
+let totalActiveTime = 0;
+
+let isActive = true;
+let idleTimeout;
+
+function resetIdleTimer() {
+  if (!document.hidden) {
+    isActive = true;
+    activeStart = Date.now();
+  }
+
+  clearTimeout(idleTimeout);
+  idleTimeout = setTimeout(() => {
+    if (isActive) {
+      totalActiveTime += Date.now() - activeStart;
+      isActive = false;
+    }
+  }, 15000); // 15s idle = inactive
+}
+
+// Activity events
+["mousemove", "keydown", "scroll", "click", "touchstart"].forEach(event => {
+  window.addEventListener(event, resetIdleTimer);
+});
+
+// Tab visibility
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    if (isActive) {
+      totalActiveTime += Date.now() - activeStart;
+      isActive = false;
+    }
+  } else {
+    resetIdleTimer();
+  }
+});
+
+// When leaving page
+window.addEventListener("beforeunload", () => {
+  totalTabTime = Date.now() - tabStart;
+
+  if (isActive) {
+    totalActiveTime += Date.now() - activeStart;
+  }
+
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  navigator.sendBeacon(
+    "https://websitecchs.onrender.com/api/stats/time",
+    JSON.stringify({
+      token,
+      tabTime: Math.floor(totalTabTime / 1000),
+      activeTime: Math.floor(totalActiveTime / 1000)
+    })
+  );
+});
+
+// Start tracking immediately
+resetIdleTimer();
+</script>
 <body>
 <div class="dark-toggle" id="darkToggle">🌙</div>
 
@@ -266,6 +332,53 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+let totalActive = 0;
+let idleTimer;
+
+function resetActivity() {
+  if (!document.hidden && !isActive) {
+    isActive = true;
+    activeStart = Date.now();
+  }
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => {
+    if (isActive) {
+      totalActive += Date.now() - activeStart;
+      isActive = false;
+    }
+  }, 15000);
+}
+
+["mousemove", "keydown", "click", "scroll"].forEach(e =>
+  document.addEventListener(e, resetActivity)
+);
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && isActive) {
+    totalActive += Date.now() - activeStart;
+    isActive = false;
+  } else if (!document.hidden) {
+    resetActivity();
+  }
+});
+
+window.addEventListener("beforeunload", () => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const tabTime = Math.floor((Date.now() - tabStart) / 1000);
+  const activeTime = Math.floor(
+    (totalActive + (isActive ? Date.now() - activeStart : 0)) / 1000
+  );
+
+  navigator.sendBeacon(
+    "https://websitecchs.onrender.com/api/stats/time",
+    JSON.stringify({ token, tabTime, activeTime })
+  );
+});
+
+resetActivity();
 </script>
 </body>
 </html>

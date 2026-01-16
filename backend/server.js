@@ -33,3 +33,32 @@ app.listen(PORT, () => console.log("Server running on port", PORT));
 app.get("/api/test", (req, res) => {
   res.json({ working: true });
 });
+
+app.post("/api/stats/time", async (req, res) => {
+  try {
+    const { token, tabTime, activeTime } = req.body;
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    await User.findByIdAndUpdate(decoded.id, {
+      $inc: {
+        timeTab: tabTime || 0,
+        timeActive: activeTime || 0
+      }
+    });
+
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(400);
+  }
+});
+
+app.get("/api/admin/user-times", async (req, res) => {
+  try {
+    const users = await User.find().select("username timeTab timeActive");
+    res.json(users);
+  } catch {
+    res.sendStatus(500);
+  }
+});
+
