@@ -351,6 +351,10 @@ footer:hover {
   transform: translateY(-2px); /* subtle lift on hover */
 }
 
+body {
+  padding-bottom: 80px; /* adjust based on footer height */
+}
+
 
 
 /* ============================================
@@ -546,8 +550,22 @@ body.dark footer {
 }
 </style>
 </head>
+<script>
+function scrollToBottom() {
+  window.scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth"
+  });
+}
+
+// Call it whenever new content loads
+window.addEventListener("load", scrollToBottom);
+window.addEventListener("resize", scrollToBottom);
+</script>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4FWKCJSLBZ"></script>
+
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -555,6 +573,7 @@ body.dark footer {
 
   gtag('config', 'G-4FWKCJSLBZ');
 </script>
+
 <script>
 let tabStart = Date.now();
 let activeStart = Date.now();
