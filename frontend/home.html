@@ -740,37 +740,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", isDark ? "dark" : "light");
   });
 });
-
-
-["mousemove", "keydown", "click", "scroll"].forEach(e =>
-  document.addEventListener(e, resetActivity)
-);
-
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden && isActive) {
-    totalActive += Date.now() - activeStart;
-    isActive = false;
-  } else if (!document.hidden) {
-    resetActivity();
-  }
-});
-
-window.addEventListener("beforeunload", () => {
-  const token = localStorage.getItem("token");
-  if (!token) return;
-
-  const tabTime = Math.floor((Date.now() - tabStart) / 1000);
-  const activeTime = Math.floor(
-    (totalActive + (isActive ? Date.now() - activeStart : 0)) / 1000
-  );
-
-  navigator.sendBeacon(
-    "https://websitecchs.onrender.com/api/stats/time",
-    JSON.stringify({ token, tabTime, activeTime })
-  );
-});
-
-resetActivity();
 </script>
 </body>
 </html>
