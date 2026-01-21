@@ -20,6 +20,12 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-bottom: 80px;
+  transition: background 0.3s ease;
+}
+
+body.dark {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
 /* ============================================
@@ -36,6 +42,12 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background 0.3s ease;
+}
+
+body.dark header {
+  background: rgba(22, 22, 22, 0.98);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .logo {
@@ -48,9 +60,17 @@ header {
   letter-spacing: -0.5px;
 }
 
+body.dark .logo {
+  background: linear-gradient(135deg, #8ea2ff 0%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 nav {
   display: flex;
   gap: 2rem;
+  align-items: center;
 }
 
 nav a {
@@ -62,6 +82,10 @@ nav a {
   border-radius: 8px;
   transition: all 0.3s ease;
   position: relative;
+}
+
+body.dark nav a {
+  color: #f1f1f1;
 }
 
 nav a::after {
@@ -81,8 +105,47 @@ nav a:hover {
   background: rgba(102, 126, 234, 0.1);
 }
 
+body.dark nav a:hover {
+  color: #8ea2ff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
 nav a:hover::after {
   width: 60%;
+}
+
+/* ============================================
+   Dark Mode Toggle
+   ============================================ */
+.dark-toggle {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  user-select: none;
+  z-index: 99999;
+  transition: transform 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .dark-toggle {
+  background: rgba(44, 44, 44, 0.9);
+}
+
+.dark-toggle:hover {
+  transform: scale(1.15) rotate(20deg);
+}
+
+.dark-toggle:active {
+  transform: scale(0.95);
 }
 
 /* ============================================
@@ -124,11 +187,19 @@ nav a:hover::after {
   font-weight: 800;
 }
 
+body.dark .page-header h1 {
+  color: #f5f5f5;
+}
+
 .page-header p {
   font-size: 1.25rem;
   color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   font-weight: 500;
+}
+
+body.dark .page-header p {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ============================================
@@ -162,10 +233,20 @@ nav a:hover::after {
   margin: 0 auto;
 }
 
+body.dark .search-bar input {
+  background: #1c1c1c;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
 .search-bar input:focus {
   outline: none;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
+}
+
+body.dark .search-bar input:focus {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
 .search-bar input::placeholder {
@@ -182,7 +263,6 @@ nav a:hover::after {
   animation: fadeIn 0.6s ease-out 0.4s both;
 }
 
-
 /* ============================================
    Game Cards
    ============================================ */
@@ -194,6 +274,11 @@ nav a:hover::after {
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   animation: slideUp 0.5s ease-out both;
+}
+
+body.dark .game-card {
+  background: #1a1a1a;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
 }
 
 @keyframes slideUp {
@@ -212,6 +297,10 @@ nav a:hover::after {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
 }
 
+body.dark .game-card:hover {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+}
+
 .game-image {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   height: 180px;
@@ -222,6 +311,10 @@ nav a:hover::after {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+}
+
+body.dark .game-image {
+  background: linear-gradient(135deg, #5568d3 0%, #6b4fa0 100%);
 }
 
 .game-image::before {
@@ -255,6 +348,10 @@ nav a:hover::after {
   line-height: 1.3;
 }
 
+body.dark .game-title {
+  color: #f5f5f5;
+}
+
 .game-description {
   color: #666;
   font-size: 0.95rem;
@@ -265,6 +362,10 @@ nav a:hover::after {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+body.dark .game-description {
+  color: #aaa;
 }
 
 .game-meta {
@@ -281,6 +382,10 @@ nav a:hover::after {
   font-size: 0.85rem;
   font-weight: 600;
   display: inline-block;
+}
+
+body.dark .game-category {
+  background: linear-gradient(135deg, #4a5fb8 0%, #5a3d82 100%);
 }
 
 /* ============================================
@@ -314,6 +419,11 @@ nav a:hover::after {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+body.dark .empty-state {
+  background: #1b1b1b;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
 .empty-state h2 {
   font-size: 2rem;
   color: #333;
@@ -321,46 +431,57 @@ nav a:hover::after {
   font-weight: 700;
 }
 
+body.dark .empty-state h2 {
+  color: #f5f5f5;
+}
+
 .empty-state p {
   font-size: 1.1rem;
   color: #666;
+}
+
+body.dark .empty-state p {
+  color: #aaa;
 }
 
 /* ============================================
    Footer
    ============================================ */
 footer {
-  position: fixed;          /* makes it always visible */
-  bottom: 0;                /* sticks to bottom of viewport */
-  left: 0;                  /* align left edge */
-  width: 100%;              /* stretch across screen */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background: rgba(255, 255, 255, 0.98);
   text-align: center;
   padding: 1.5rem;
   color: #666;
   font-size: 0.9rem;
   font-weight: 500;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1); /* subtle shadow above footer */
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  z-index: 9999;            /* ensure it's on top */
-  margin-top: 0;            /* remove old spacing so it doesn’t push content */
-  transition: transform 0.3s ease;
+  z-index: 99;
+  transition: all 0.3s ease;
+}
+
+body.dark footer {
+  background: rgba(22, 22, 22, 0.98);
+  color: #aaa;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
 }
 
 footer:hover {
-  transform: translateY(-2px); /* subtle lift on hover */
+  transform: translateY(-2px);
 }
-
-body {
-  padding-bottom: 80px; /* adjust based on footer height */
-}
-
-
 
 /* ============================================
    Responsive Design
    ============================================ */
 @media (max-width: 768px) {
+  body {
+    padding-bottom: 70px;
+  }
+
   header {
     flex-direction: column;
     gap: 1rem;
@@ -374,6 +495,13 @@ body {
   nav a {
     font-size: 0.9rem;
     padding: 0.4rem 0.8rem;
+  }
+
+  .dark-toggle {
+    top: 70px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
   }
 
   .container {
@@ -397,9 +525,18 @@ body {
     font-size: 1rem;
     padding: 0.875rem 1.25rem;
   }
+
+  footer {
+    padding: 1.25rem;
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 480px) {
+  body {
+    padding-bottom: 65px;
+  }
+
   .logo {
     font-size: 1.5rem;
   }
@@ -408,6 +545,14 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
+  }
+
+  .dark-toggle {
+    top: 60px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
   }
 
   .page-header h1 {
@@ -435,100 +580,11 @@ body {
   .game-title {
     font-size: 1.2rem;
   }
-}
-/* ========== DARK MODE IMPROVEMENTS ========== */
 
-/* ================================
-   REAL DARK MODE FIX FOR HOME
-================================ */
-
-body.dark {
-  background: #0f0f12;
-}
-
-/* Header */
-body.dark header {
-  background: #161616;
-}
-
-/* Logo */
-body.dark .logo {
-  background: none;
-  color: #8ea2ff;
-}
-
-/* Nav links */
-body.dark nav a {
-  color: #f1f1f1;
-}
-
-body.dark nav a:hover {
-  background: rgba(255,255,255,0.08);
-}
-
-/* Page header text */
-body.dark .page-header h1,
-body.dark .page-header p {
-  color: #f5f5f5;
-}
-
-/* Search bar */
-body.dark .search-bar input {
-  background: #1c1c1c;
-  color: white;
-}
-
-body.dark .search-bar input::placeholder {
-  color: #aaa;
-}
-
-/* Game cards */
-body.dark .game-card {
-  background: #1a1a1a;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.6);
-}
-
-body.dark .game-title {
-  color: #f5f5f5;
-}
-
-body.dark .game-description {
-  color: #aaa;
-}
-
-/* Category pill */
-body.dark .game-category {
-  background: #2b2b2b;
-  color: #ddd;
-}
-
-/* Empty state */
-body.dark .empty-state {
-  background: #1b1b1b;
-  color: white;
-}
-
-/* Footer */
-body.dark footer {
-  background: #161616;
-  color: #aaa;
-}
-
-.dark-toggle {
-    position: fixed;
-    top: 80px; /* ← lower than before */
-    right: 20px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    user-select: none;
-    z-index: 99999;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    opacity: 0.85;
-}
-
-.dark-toggle:hover {
-    transform: scale(1.2);
-    opacity: 1;
+  footer {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
 }
 
 /* ============================================
@@ -548,61 +604,48 @@ body.dark footer {
   outline: 3px solid #667eea;
   outline-offset: 4px;
 }
+
+body.dark .game-card:focus {
+  outline-color: #8ea2ff;
+}
 </style>
 </head>
-<script>
-function scrollToBottom() {
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: "smooth"
-  });
-}
-
-// Call it whenever new content loads
-window.addEventListener("load", scrollToBottom);
-window.addEventListener("resize", scrollToBottom);
-</script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4FWKCJSLBZ"></script>
-
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-4FWKCJSLBZ');
 </script>
 
-</script>
 <body>
-<header>
 <div id="darkToggle" class="dark-toggle">🌙</div>
 
-<div class="logo">WebsiteCCHS</div>
-<nav>
-  <a href="home.html">Home</a>
-
-  <a href="login.html" id="loginLink">Login</a>
-  <a href="admin.html" id="adminLink" style="display:none;">Admin Panel</a>
-  <a href="#" id="logoutLink" style="display:none;">Logout</a>
-</nav>
-
+<header>
+  <div class="logo">WebsiteCCHS</div>
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="index.html" id="loginLink">Login</a>
+    <a href="admin.html" id="adminLink" style="display:none;">Admin Panel</a>
+    <a href="#" id="logoutLink" style="display:none;">Logout</a>
+  </nav>
 </header>
 
 <div class="container">
-<div class="page-header">
-<h1>📄 Test Library</h1>
-<p>Study and get ready for the next test!</p>
-</div>
+  <div class="page-header">
+    <h1>📄 Test Library</h1>
+    <p>Study and get ready for the next test!</p>
+  </div>
 
-<div class="search-bar">
-<input type="text" id="searchInput" placeholder="Search tests...">
-</div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search tests...">
+  </div>
 
-<div class="game-container" id="games">
-<div class="loading">Loading Tests...</div>
-</div>
+  <div class="game-container" id="games">
+    <div class="loading">Loading Tests...</div>
+  </div>
 </div>
 
 <footer>For requests: uorxh@hi2.in</footer>
@@ -617,7 +660,6 @@ try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     userRole = payload.role || "user";
   } else {
-    // Not logged in → go to login page
     window.location.href = "index.html";
   }
 } catch(e) {
@@ -652,19 +694,19 @@ function loadGames(gamesToDisplay = games) {
     container.innerHTML = `<div class="empty-state"><h2>No tests available</h2><p>Tests will appear here once added</p></div>`;
     return;
   }
-  container.innerHTML = gamesToDisplay.map((game,index) => `
+  container.innerHTML = gamesToDisplay.map((game, index) => `
     <div class="game-card" style="animation-delay:${index*0.1}s" onclick="playGame('${game._id}')" tabindex="0" role="button" aria-label="Play ${escapeHtml(game.title)}">
       <div class="game-image">📄</div>
       <div class="game-info">
         <div class="game-title">${escapeHtml(game.title)}</div>
-        <div class="game-description">${escapeHtml(game.description||'No description available')}</div>
-        <div class="game-meta"><span class="game-category">${escapeHtml(game.category||'Uncategorized')}</span></div>
+        <div class="game-description">${escapeHtml(game.description || 'No description available')}</div>
+        <div class="game-meta"><span class="game-category">${escapeHtml(game.category || 'Uncategorized')}</span></div>
       </div>
     </div>
   `).join('');
 }
 
-document.getElementById('searchInput').addEventListener('input', function(e){
+document.getElementById('searchInput').addEventListener('input', function(e) {
   const searchTerm = e.target.value.toLowerCase();
   const filtered = games.filter(game => 
     game.title.toLowerCase().includes(searchTerm) ||
@@ -674,16 +716,16 @@ document.getElementById('searchInput').addEventListener('input', function(e){
   loadGames(filtered);
 });
 
-function escapeHtml(text){
-  const div=document.createElement('div');
-  div.textContent=text;
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
   return div.innerHTML;
 }
 
-function playGame(id){
-  const game=games.find(g=>g._id===id);
-  if(!game)return;
-  const newWindow=window.open('','_blank');
+function playGame(id) {
+  const game = games.find(g => g._id === id);
+  if (!game) return;
+  const newWindow = window.open('', '_blank');
   newWindow.document.write(`
     <!DOCTYPE html><html><head><title>${game.title}</title>
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
@@ -695,27 +737,28 @@ function playGame(id){
 fetchGames();
 
 // Navbar login/logout/admin
-const loginLink=document.getElementById("loginLink");
-const adminLink=document.getElementById("adminLink");
-const logoutLink=document.getElementById("logoutLink");
+const loginLink = document.getElementById("loginLink");
+const adminLink = document.getElementById("adminLink");
+const logoutLink = document.getElementById("logoutLink");
 
-if(token){
-  loginLink.style.display="none";
-  logoutLink.style.display="inline-block";
-  adminLink.style.display=userRole==="admin"?"inline-block":"none";
+if (token) {
+  loginLink.style.display = "none";
+  logoutLink.style.display = "inline-block";
+  adminLink.style.display = userRole === "admin" ? "inline-block" : "none";
 } else {
-  loginLink.style.display="inline-block";
-  logoutLink.style.display="none";
-  adminLink.style.display="none";
+  loginLink.style.display = "inline-block";
+  logoutLink.style.display = "none";
+  adminLink.style.display = "none";
 }
 
 logoutLink.addEventListener("click", (e) => {
   e.preventDefault();
   localStorage.removeItem("token");
   sessionStorage.removeItem("token");
-  window.location.href = "index.html"; // redirect to login page
+  window.location.href = "index.html";
 });
 
+// Dark mode
 document.addEventListener("DOMContentLoaded", () => {
   const darkToggle = document.getElementById("darkToggle");
 
@@ -733,10 +776,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Toggle theme
   darkToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
-
     const isDark = document.body.classList.contains("dark");
     darkToggle.textContent = isDark ? "☀️" : "🌙";
-
     localStorage.setItem("theme", isDark ? "dark" : "light");
   });
 });
