@@ -688,9 +688,7 @@ submitBtn.addEventListener("click", async () => {
       modalOverlay.classList.add('show');
       submitBtn.disabled = false;
       submitBtn.textContent = "Register";
-      // Clear form fields
-      document.getElementById("username").value = "";
-      passwordInput.value = "";
+      
       return;
     }
 
