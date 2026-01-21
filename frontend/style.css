@@ -275,3 +275,33 @@
 body.dark .side-hint {
   color: #bbb;
 }
+
+.side-hint {
+  position: fixed;              /* overlay, not part of layout */
+  right: 8%;                    /* distance from right side of screen */
+  color: #bbb;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 9999;               /* always above everything */
+  pointer-events: none;        /* won't block clicks */
+  opacity: 0.9;
+}
+
+.hint-email {
+  top: 45%;                    /* vertical position */
+}
+
+.hint-password {
+  top: 52%;
+}
+
+.side-hint span {
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+body.dark .side-hint {
+  color: #aaa;
+}
