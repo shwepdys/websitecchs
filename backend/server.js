@@ -53,12 +53,12 @@ app.post("/api/stats/time", async (req, res) => {
   }
 });
 
-import rateLimit from "express-rate-limit";
+const rateLimit = require("express-rate-limit");
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // max 100 requests per IP per window
-  message: "Too many requests, try again later"
+  max: 100, // per IP
+  message: { error: "Too many requests, try again later" }
 });
 
 app.use("/api/", limiter);
