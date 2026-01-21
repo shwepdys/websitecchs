@@ -244,3 +244,14 @@
   }
 }
 
+.hint-text {
+  font-size: 0.75rem;
+  color: #777;
+  margin-top: -8px;
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+body.dark .hint-text {
+  color: #aaa;
+}
