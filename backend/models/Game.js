@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 
-module.exports = mongoose.model("Game", new mongoose.Schema({
+const gameSchema = new mongoose.Schema({
   title: String,
-  html: String,
-  createdAt: { type: Date, default: Date.now }
-}));
+  html: String,   // can contain HTML OR URL
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+module.exports = mongoose.model("Game", gameSchema);
