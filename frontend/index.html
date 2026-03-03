@@ -577,9 +577,9 @@ resetIdleTimer();
   <div class="error-message" id="errorMessage"></div>
 
   <div class="input-group">
-    <label for="username">Email</label>
-    <input type="text" id="username" placeholder="Enter your email">
-    <span class="hint">Enter any of your emails</span>
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Choose a username">
+    <span class="hint">Use letters, numbers, or underscore only</span>
   </div>
 
   <div class="input-group">
@@ -659,7 +659,7 @@ submitBtn.addEventListener("click", async () => {
   errorMessage.style.display = "none";
 
   if (!username || !password) {
-    errorMessage.textContent = "Email and password required";
+    errorMessage.textContent = "Username and password required";
     errorMessage.style.display = "block";
     return;
   }

@@ -10,14 +10,13 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
-  // Validate email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!username || !password || !emailRegex.test(username)) {
-    return res.status(400).json({ message: "Invalid email or password" });
+  // Basic validation: require username and password
+  if (!username || !password) {
+    return res.status(400).json({ message: "Username and password are required" });
   }
 
   const existingUser = await User.findOne({ username });
-  if (existingUser) return res.status(400).json({ message: "Email already registered" });
+  if (existingUser) return res.status(400).json({ message: "Username already taken" });
 
   const user = new User({ username, password, role: "user" });
   await user.save();
