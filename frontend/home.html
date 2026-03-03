@@ -725,7 +725,24 @@ function escapeHtml(text) {
 function playGame(id) {
   const game = games.find(g => g._id === id);
   if (!game) return;
-  const newWindow = window.open('', '_blank');
+
+  const content = (game.html || "").trim();
+  const urlPattern = /^https?:\/\/\S+/i;
+
+  // If the stored content is a URL, open it via about:blank
+  if (urlPattern.test(content)) {
+    const win = window.open("about:blank", "_blank");
+    if (win) {
+      win.location.href = content;
+    } else {
+      // Fallback if the popup is blocked
+      window.location.href = content;
+    }
+    return;
+  }
+
+  // Otherwise treat it as raw HTML content
+  const newWindow = window.open("about:blank", "_blank");
   newWindow.document.write(`
     <!DOCTYPE html><html><head><title>${game.title}</title>
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
