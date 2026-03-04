@@ -716,7 +716,7 @@ function loadGames(gamesToDisplay = games) {
       <div class="game-image">📄</div>
       <div class="game-info">
         <div class="game-title">${escapeHtml(game.title)}</div>
-        <div class="game-description">${escapeHtml(game.description || 'No description available')}</div>
+        <div class="game-description">${escapeHtml(game.description || '')}</div>
         <div class="game-meta">
           <span class="game-category">${escapeHtml(game.category || 'Uncategorized')}</span>
         </div>
@@ -786,12 +786,6 @@ function playGame(id) {
       window.location.href = content;
     }
     return;
-  }
-
-  // Simple safety check for tests that contain scripts
-  if (/<script[\s>]/i.test(content)) {
-    const proceed = confirm("This test contains scripts. Only proceed if you trust the source. Continue?");
-    if (!proceed) return;
   }
 
   // Otherwise treat it as raw HTML content
