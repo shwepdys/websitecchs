@@ -548,7 +548,7 @@ window.addEventListener("beforeunload", () => {
   if (!token) return;
 
   navigator.sendBeacon(
-    "https://websitecchs.onrender.com/api/stats/time",
+    (window.STATS_API || "https://websitecchs.onrender.com/api/stats") + "/time",
     JSON.stringify({
       token,
       tabTime: Math.floor(totalTabTime / 1000),
@@ -595,8 +595,9 @@ resetIdleTimer();
   <span class="toggle-link" id="toggleForm">Already have an account? Login</span>
 </div>
 
+<script src="config.js"></script>
 <script>
-const API = "https://websitecchs.onrender.com/api/auth";
+const AUTH_API = window.AUTH_API || "https://websitecchs.onrender.com/api/auth";
 let isLogin = false;
 
 const formTitle = document.getElementById("formTitle");
@@ -674,7 +675,7 @@ submitBtn.addEventListener("click", async () => {
   submitBtn.textContent = isLogin ? "Logging in..." : "Registering...";
 
   try {
-    const res = await fetch(`${API}/${isLogin ? "login" : "register"}`, {
+    const res = await fetch(`${AUTH_API}/${isLogin ? "login" : "register"}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
@@ -684,20 +685,23 @@ submitBtn.addEventListener("click", async () => {
     if (!res.ok) throw new Error(data.message || "Error");
 
     if (!isLogin) {
-      // Show success modal instead of alert
-      modalOverlay.classList.add('show');
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Register";
-      
+      // After successful registration, automatically log the user in
+      const loginRes = await fetch(`${AUTH_API}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+      const loginData = await loginRes.json();
+      if (!loginRes.ok) throw new Error(loginData.message || "Error");
+
+      localStorage.setItem("token", loginData.token);
+      window.location.href = "home.html";
       return;
     }
 
-    // Save token
+    // Login flow
     localStorage.setItem("token", data.token);
-
-    // Redirect immediately after login
     window.location.href = "home.html";
-
   } catch (err) {
     errorMessage.textContent = err.message;
     errorMessage.style.display = "block";

@@ -1,5 +1,5 @@
 // API Configuration
-const API = "https://websitecchs.onrender.com/api"; // Replace with your Render backend
+const API = window.API_BASE || "https://websitecchs.onrender.com/api"; // Shared backend base URL
 
 // --- Utility Functions ---
 const getToken = () => localStorage.getItem("token");
@@ -73,6 +73,8 @@ function showGameList() {
 // --- CRUD Operations ---
 async function addGame() {
   const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const category = document.getElementById("category").value.trim();
   const html = document.getElementById("html").value.trim();
   const token = getToken();
 
@@ -88,13 +90,15 @@ async function addGame() {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify({ title, html })
+      body: JSON.stringify({ title, html, description, category })
     });
 
     if (!res.ok) throw new Error("Failed to add test");
 
     showNotification("Test added successfully!", "success");
     document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("category").value = "";
     document.getElementById("html").value = "";
     loadGameList();
 
@@ -120,7 +124,7 @@ async function loadGameList() {
     listContainer.innerHTML = "";
 
     if (!games.length) {
-      listContainer.innerHTML = "<p>No tests added yet.</p>";
+      listContainer.innerHTML = "<p>No tests added yet. Use \"Add Test\" to create your first one.</p>";
       return;
     }
 
@@ -172,8 +176,16 @@ async function editGame(id) {
     const game = await res.json();
 
     const newTitle = prompt("New title:", game.title);
-    const newHtml = prompt("New HTML:", game.html);
-    if (!newTitle || !newHtml) return;
+    if (!newTitle) return;
+
+    const newDescription = prompt("New description (optional):", game.description || "");
+    if (newDescription === null) return;
+
+    const newCategory = prompt("New category (optional):", game.category || "");
+    if (newCategory === null) return;
+
+    const newHtml = prompt("New HTML or URL:", game.html);
+    if (!newHtml) return;
 
     const updateRes = await fetch(`${API}/games/${id}`, {
       method: "PUT",
@@ -181,7 +193,12 @@ async function editGame(id) {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ title: newTitle, html: newHtml })
+      body: JSON.stringify({
+        title: newTitle,
+        html: newHtml,
+        description: newDescription,
+        category: newCategory
+      })
     });
 
     if (!updateRes.ok) throw new Error("Failed to update test");

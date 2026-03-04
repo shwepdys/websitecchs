@@ -114,6 +114,21 @@ nav a:hover::after {
   width: 60%;
 }
 
+.role-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+body.dark .role-badge {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+}
+
 /* ============================================
    Dark Mode Toggle
    ============================================ */
@@ -388,6 +403,20 @@ body.dark .game-category {
   background: linear-gradient(135deg, #4a5fb8 0%, #5a3d82 100%);
 }
 
+.external-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1e293b;
+  background: #e0f2fe;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+body.dark .external-tag {
+  color: #e0f2fe;
+  background: #0f172a;
+}
+
 /* ============================================
    Loading & Empty States
    ============================================ */
@@ -629,6 +658,7 @@ body.dark .game-card:focus {
     <a href="home.html">Home</a>
     <a href="index.html" id="loginLink">Login</a>
     <a href="admin.html" id="adminLink" style="display:none;">Admin Panel</a>
+    <span id="roleBadge" class="role-badge" style="display:none;"></span>
     <a href="#" id="logoutLink" style="display:none;">Logout</a>
   </nav>
 </header>
@@ -650,8 +680,9 @@ body.dark .game-card:focus {
 
 <footer>For any requests, contact: uorxh@hi2.in</footer>
 
+<script src="config.js"></script>
 <script>
-const API = "https://websitecchs.onrender.com/api";
+const API = window.API_BASE || "https://websitecchs.onrender.com/api";
 let token = localStorage.getItem("token") || sessionStorage.getItem("token");
 let userRole = "user";
 
@@ -700,7 +731,10 @@ function loadGames(gamesToDisplay = games) {
       <div class="game-info">
         <div class="game-title">${escapeHtml(game.title)}</div>
         <div class="game-description">${escapeHtml(game.description || 'No description available')}</div>
-        <div class="game-meta"><span class="game-category">${escapeHtml(game.category || 'Uncategorized')}</span></div>
+        <div class="game-meta">
+          <span class="game-category">${escapeHtml(game.category || 'Uncategorized')}</span>
+          ${/^https?:\/\/\S+/i.test((game.html || '').trim()) ? '<span class="external-tag">↗ External link</span>' : ''}
+        </div>
       </div>
     </div>
   `).join('');
@@ -769,6 +803,12 @@ function playGame(id) {
     return;
   }
 
+  // Simple safety check for tests that contain scripts
+  if (/<script[\s>]/i.test(content)) {
+    const proceed = confirm("This test contains scripts. Only proceed if you trust the source. Continue?");
+    if (!proceed) return;
+  }
+
   // Otherwise treat it as raw HTML content
   const newWindow = window.open("about:blank", "_blank");
   newWindow.document.write(`
@@ -785,15 +825,23 @@ fetchGames();
 const loginLink = document.getElementById("loginLink");
 const adminLink = document.getElementById("adminLink");
 const logoutLink = document.getElementById("logoutLink");
+const roleBadge = document.getElementById("roleBadge");
 
 if (token) {
   loginLink.style.display = "none";
   logoutLink.style.display = "inline-block";
   adminLink.style.display = userRole === "admin" ? "inline-block" : "none";
+  if (roleBadge) {
+    roleBadge.style.display = "inline-block";
+    roleBadge.textContent = userRole === "admin" ? "Admin" : "Student";
+  }
 } else {
   loginLink.style.display = "inline-block";
   logoutLink.style.display = "none";
   adminLink.style.display = "none";
+  if (roleBadge) {
+    roleBadge.style.display = "none";
+  }
 }
 
 logoutLink.addEventListener("click", (e) => {

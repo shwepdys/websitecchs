@@ -6,13 +6,13 @@ const jwt = require("jsonwebtoken");
 // --- Create a new game ---
 router.post("/", async (req, res) => {
   try {
-    const { title, html } = req.body;
+    const { title, html, description, category } = req.body;
 
     if (!title || !html) {
       return res.status(400).json({ error: "Title and HTML are required" });
     }
 
-    const newGame = new Game({ title, html });
+    const newGame = new Game({ title, html, description, category });
     const savedGame = await newGame.save();
 
     console.log("New game added:", savedGame.title);
@@ -37,10 +37,14 @@ router.get("/", async (req, res) => {
 // --- Update a game ---
 router.put("/:id", async (req, res) => {
   try {
-    const { title, html } = req.body;
+    const { title, html, description, category } = req.body;
     if (!title || !html) return res.status(400).json({ error: "Title and HTML required" });
 
-    const updated = await Game.findByIdAndUpdate(req.params.id, { title, html }, { new: true });
+    const updated = await Game.findByIdAndUpdate(
+      req.params.id,
+      { title, html, description, category },
+      { new: true }
+    );
     if (!updated) return res.status(404).json({ error: "Game not found" });
 
     res.json(updated);
