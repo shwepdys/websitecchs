@@ -61,11 +61,13 @@ function logout() {
 // --- Section Management ---
 function showAddGame() {
   document.getElementById("addGameSection").style.display = "block";
+  document.getElementById("editGameSection").style.display = "none";
   document.getElementById("gameListSection").style.display = "none";
 }
 
 function showGameList() {
   document.getElementById("addGameSection").style.display = "none";
+  document.getElementById("editGameSection").style.display = "none";
   document.getElementById("gameListSection").style.display = "block";
   loadGameList();
 }
@@ -167,6 +169,7 @@ async function deleteGame(id) {
 }
 
 async function editGame(id) {
+  window.currentEditGameId = id;
   const token = getToken();
   try {
     // Fetch current data
@@ -179,40 +182,68 @@ async function editGame(id) {
     }
     const game = await res.json();
 
-    const newTitle = prompt("New title:", game.title);
-    if (!newTitle) return;
+    // Populate edit form
+    document.getElementById("editTitle").value = game.title || "";
+    document.getElementById("editDescription").value = game.description || "";
+    document.getElementById("editCategory").value = game.category || "";
+    document.getElementById("editHtml").value = game.html || "";
 
-    const newDescription = prompt("New description (optional):", game.description || "");
-    if (newDescription === null) return;
-
-    const newCategory = prompt("New category (optional):", game.category || "");
-    if (newCategory === null) return;
-
-    const newHtml = prompt("New HTML or URL:", game.html);
-    if (!newHtml) return;
-
-    const updateRes = await fetch(`${API}/games/${id}`, {
-      method: "PUT",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        title: newTitle,
-        html: newHtml,
-        description: newDescription,
-        category: newCategory
-      })
-    });
-
-    if (!updateRes.ok) throw new Error("Failed to update test");
-    showNotification("Test updated!", "success");
-    loadGameList();
+    document.getElementById("addGameSection").style.display = "none";
+    document.getElementById("editGameSection").style.display = "block";
+    document.getElementById("gameListSection").style.display = "none";
 
   } catch (err) {
     console.error(err);
     showNotification(err.message, "error");
   }
+}
+
+async function saveEditedGame() {
+  const id = window.currentEditGameId;
+  if (!id) {
+    showNotification("No test selected for editing.", "error");
+    return;
+  }
+
+  const title = document.getElementById("editTitle").value.trim();
+  const description = document.getElementById("editDescription").value.trim();
+  const category = document.getElementById("editCategory").value.trim();
+  const html = document.getElementById("editHtml").value.trim();
+  const token = getToken();
+
+  if (!title || !html) {
+    showNotification("Title and HTML cannot be empty", "error");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/games/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ title, html, description, category })
+    });
+
+    if (!res.ok) throw new Error("Failed to update test");
+
+    showNotification("Test updated!", "success");
+    window.currentEditGameId = null;
+    document.getElementById("editGameSection").style.display = "none";
+    document.getElementById("addGameSection").style.display = "none";
+    document.getElementById("gameListSection").style.display = "block";
+    loadGameList();
+  } catch (err) {
+    console.error(err);
+    showNotification(err.message, "error");
+  }
+}
+
+function cancelEdit() {
+  window.currentEditGameId = null;
+  document.getElementById("editGameSection").style.display = "none";
+  document.getElementById("addGameSection").style.display = "block";
 }
 
 // --- Utility ---

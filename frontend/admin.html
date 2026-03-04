@@ -727,6 +727,21 @@ footer {
 <button onclick="addGame()">Add Test</button>
 </div>
 
+<!-- Edit Game Form -->
+<div id="editGameSection" class="admin-form" style="display:none;">
+<h2>Edit Test</h2>
+<div class="success-message" id="editSuccessMessage"></div>
+<div class="error-message" id="editErrorMessage"></div>
+<input type="text" id="editTitle" placeholder="Test Title">
+<input type="text" id="editDescription" placeholder="Short description (optional)">
+<input type="text" id="editCategory" placeholder="Category, e.g. Math, History (optional)">
+<textarea id="editHtml" rows="8" placeholder="Paste HTML code or full URL (https://...) here..."></textarea>
+<div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+  <button style="flex:1;" onclick="saveEditedGame()">Save changes</button>
+  <button style="flex:1; background: #e5e7eb; color:#111827;" onclick="cancelEdit()">Cancel</button>
+</div>
+</div>
+
 <!-- Game List -->
 <div id="gameListSection" class="admin-form" style="display:none;">
 <h2>All Tests</h2>
