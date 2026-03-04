@@ -403,20 +403,6 @@ body.dark .game-category {
   background: linear-gradient(135deg, #4a5fb8 0%, #5a3d82 100%);
 }
 
-.external-tag {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #1e293b;
-  background: #e0f2fe;
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-}
-
-body.dark .external-tag {
-  color: #e0f2fe;
-  background: #0f172a;
-}
-
 /* ============================================
    Loading & Empty States
    ============================================ */
@@ -733,7 +719,6 @@ function loadGames(gamesToDisplay = games) {
         <div class="game-description">${escapeHtml(game.description || 'No description available')}</div>
         <div class="game-meta">
           <span class="game-category">${escapeHtml(game.category || 'Uncategorized')}</span>
-          ${/^https?:\/\/\S+/i.test((game.html || '').trim()) ? '<span class="external-tag">↗ External link</span>' : ''}
         </div>
       </div>
     </div>
