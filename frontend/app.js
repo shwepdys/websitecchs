@@ -173,6 +173,10 @@ async function editGame(id) {
     const res = await fetch(`${API}/games/${id}`, {
       headers: { "Authorization": `Bearer ${token}` }
     });
+    if (!res.ok) {
+      showNotification("This test could not be found (it may have been deleted).", "error");
+      return;
+    }
     const game = await res.json();
 
     const newTitle = prompt("New title:", game.title);
