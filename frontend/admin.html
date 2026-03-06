@@ -699,7 +699,7 @@ footer {
 <header>
 <div class="logo">WebsiteCCHS</div>
 <nav>
-<a href="home.html">Home</a>
+<a href="tests.html">Home</a>
 <span id="roleBadge" class="role-badge" style="display:none;"></span>
 <button class="logout-btn" onclick="logout()">Logout</button>
 </nav>
@@ -778,7 +778,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (payload.role !== "admin") {
     alert("Access denied. Admins only.");
-    window.location.href = "home.html";
+    window.location.href = "tests.html";
     return;
   }
 
