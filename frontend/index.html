@@ -695,13 +695,13 @@ submitBtn.addEventListener("click", async () => {
       if (!loginRes.ok) throw new Error(loginData.message || "Error");
 
       localStorage.setItem("token", loginData.token);
-      window.location.href = "tests.html";
+      window.location.href = "house.html";
       return;
     }
 
     // Login flow
     localStorage.setItem("token", data.token);
-    window.location.href = "tests.html";
+    window.location.href = "house.html";
   } catch (err) {
     errorMessage.textContent = err.message;
     errorMessage.style.display = "block";
@@ -723,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Only redirect if user is trying to access login/register page directly
   if (token && (window.location.pathname.endsWith("index.html") || window.location.pathname.endsWith("/"))) {
-    window.location.href = "tests.html";
+    window.location.href = "house.html";
   }
 });
 </script>
