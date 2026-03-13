@@ -6,7 +6,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://websitecchs.vercel.app",
+  origin: "https://websitecarmel.vercel.app",
   credentials: true
 }));
 
