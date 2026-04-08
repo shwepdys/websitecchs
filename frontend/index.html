@@ -548,7 +548,7 @@ window.addEventListener("beforeunload", () => {
   if (!token) return;
 
   navigator.sendBeacon(
-    (window.STATS_API || "https://websitecchs.onrender.com/api/stats") + "/time",
+    (window.STATS_API || "https://websitecarmel.onrender.com/api/stats") + "/time",
     JSON.stringify({
       token,
       tabTime: Math.floor(totalTabTime / 1000),
@@ -597,7 +597,7 @@ resetIdleTimer();
 
 <script src="config.js"></script>
 <script>
-const AUTH_API = window.AUTH_API || "https://websitecchs.onrender.com/api/auth";
+const AUTH_API = window.AUTH_API || "https://websitecarmel.onrender.com/api/auth";
 let isLogin = false;
 
 const formTitle = document.getElementById("formTitle");

@@ -1,5 +1,5 @@
 // API Configuration
-const API = window.API_BASE || "https://websitecchs.onrender.com/api"; // Shared backend base URL
+const API = window.API_BASE || "https://websitecarmel.onrender.com/api"; // Shared backend base URL
 
 // --- Utility Functions ---
 const getToken = () => localStorage.getItem("token");
